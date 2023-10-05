@@ -1,0 +1,55 @@
+/* Пример стилей для CKEditor 5 */
+
+/* Общий стиль текста в редакторе */
+.ck-content {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: red;
+}
+
+/* Стиль заголовков */
+.ck-heading_heading1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.ck-heading_heading2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* Стиль ссылок */
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Стиль для вставленных видео */
+figure[data-embed] {
+    display: block;
+    margin: 16px 0;
+    text-align: center;
+}
+
+/* Добавьте свои собственные стили здесь */
+
+/* Стили для смайликов, если они поддерживаются */
+/* Напоминаю, что у вас может не быть поддержки смайликов, если не установлен соответствующий плагин */
+
+/* Стиль смайликов */
+.ck-widget__smiley {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+/* Стиль для выбранного смайлика */
+.ck-widget__smiley:hover {
+    opacity: 0.8;
+}

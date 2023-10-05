@@ -1,0 +1,64 @@
+/* Основные стили Quill */
+.ql-container {
+    border: 1px solid #ccc;
+    max-height: 500px;
+    /* Максимальная высота контейнера редактора */
+}
+
+/* Стили для панели инструментов */
+.ql-toolbar {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #f3f3f3;
+}
+
+/* Кнопки на панели инструментов */
+.ql-toolbar button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 2px;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+/* Стили для текстовых элементов в редакторе */
+.ql-editor {
+    font-size: 16px;
+    /* Размер шрифта текста в редакторе */
+    line-height: 1.5;
+    /* Межстрочный интервал */
+    padding: 10px;
+}
+
+/* Стили для выделенного текста */
+.ql-editor strong {
+    font-weight: bold;
+}
+
+.ql-editor em {
+    font-style: italic;
+}
+
+/* Стили для списков */
+.ql-editor ul,
+.ql-editor ol {
+    margin-left: 30px;
+}
+
+/* Стили для ссылок */
+.ql-editor a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+/* Стили для изображений */
+.ql-editor img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Стили для вставляемого контента (вставленного из буфера обмена) */
+.ql-editor .ql-paste-manager {
+    display: none;
+}
