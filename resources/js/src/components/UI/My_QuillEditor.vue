@@ -13,8 +13,10 @@ export default {
         data: Object,
     },
     mounted() {
+
         const quill = new Quill(this.$refs.quillEditor, {
             theme: 'snow',
+            direction: 'rtl',
             modules: {
                 toolbar: [
                     [{ font: [] }],
@@ -37,7 +39,7 @@ export default {
 
         // Set the initial value from props.data.value
         quill.root.innerHTML = this.data.value || '';
-
+        // quill.format('direction', 'rtl');
         this.quill = quill;
     },
     watch: {

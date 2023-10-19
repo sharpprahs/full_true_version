@@ -12,6 +12,7 @@ class UserController extends Controller
         $users = User::select('name', 'surname', 'patronymic', 'nickname', 'accesses')->get();
         return response()->json($users);
     }
+
     public function updateAccesses(Request $request)
     {
         // Добавьте этот код для отладки

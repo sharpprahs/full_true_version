@@ -21,7 +21,7 @@ body {
     --main_color_green_v2: #1BB96D;
     --main_color_nonactive: rgba(19, 97, 162, 0.08);
     --main_color_delete: #FCF8FA;
-    --main_color_delete_v2: #E2574C;
+    --main_color_delete_v2: rgba(226, 87, 76, 0.5);
     --main_color_delete_v3: #F01420;
     --main_color_scroll: rgba(19, 97, 162, 0.08);
     --gradient_custom: linear-gradient(90deg, #242E3E -32.66%, #0E141F 113.85%);

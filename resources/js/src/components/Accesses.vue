@@ -8,26 +8,22 @@
         <template #column0="{ entity }">
           {{ entity.name }}
         </template>
-        <!-- <template #column1="{ entity }">
-        <li v-for="(access, i) in entity.accesses" :key="`${access}-${i}`">
-          {{ access }}
-        </li>
-      </template> -->
         <template #column1="{ entity }">
           <div>
             <multiselect
-              v-model="entity.selectedAccesses"
               tag-placeholder="Add this as new tag"
               placeholder="Добавьте доступ"
               label="name"
               :options="value"
               :multiple="true"
-              :taggable="true"
+              :taggable="false"
               track-by="access_num"
-              @tag="addTag"
-              @remove="removeAccess(entity, $event)"
               :select-label="'Выберите'"
               :selected-label="'Выбрано'"
+              :model-value="entity.selectedAccesses"
+              @update:model-value="
+                updateSelected(entity, $event)
+              "
               :deselect-label="'Нажмите Enter, чтобы убрать'"
             >
             </multiselect>
@@ -42,122 +38,166 @@
 import Multiselect from "vue-multiselect/src/Multiselect.vue";
 import "@/assets/styles/multiselect-styles.css";
 import UTable from "@/components/UI/UTable.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   components: {
     Multiselect,
-      UTable,
+    UTable,
   },
   data() {
     return {
+        warning_text_watcher:"",
+        warning_text_watcher_action:"",
       value: [
-          { name: "Команда/доступы", access_num: 1 },
-          { name: "Команда/преподователи", access_num: 2 },
-          { name: "Блог/публикации", access_num: 3 },
-          { name: "Блог/теги", access_num: 4 },
-          { name: "Подкаст/эпизоды", access_num: 5 },
-          { name: "Граматика/публикации", access_num: 6 },
-          { name: "Граматика/уровни", access_num: 7 },
-          { name: "Видео/видео", access_num: 8 },
-          { name: "Видео/категории", access_num: 9 },
+        { name: "Команда/доступы", access_num: 1 },
+        { name: "Команда/преподователи", access_num: 2 },
+        { name: "Блог/публикации", access_num: 3 },
+        { name: "Блог/теги", access_num: 4 },
+        { name: "Подкаст/эпизоды", access_num: 5 },
+        { name: "Граматика/публикации", access_num: 6 },
+        { name: "Граматика/уровни", access_num: 7 },
+        { name: "Видео/видео", access_num: 8 },
+        { name: "Видео/категории", access_num: 9 },
       ],
       headers: ["Пользователь", "Доступы"],
       data: [],
+      selectedAccessesCopy: [],
+        oldVal: [],
+      first_val: [],
+      first_status: true,
     };
   },
   methods: {
-      addTag(newTag) {
-          console.log("sad")
-          const tag = {
-              name: newTag,
-              access_num: this.value.length + 1, // Генерируем новый access_num
+
+      async sendDataToServer(name, surname, patronymic, accessNumArray) {
+          try {
+              const token = localStorage.getItem("token"); // Получите токен из локального хранилища
+              const response = await axios.put(
+                  "/api/users/update-accesses",
+                  {
+                      name,
+                      surname,
+                      patronymic,
+                      accesses: accessNumArray,
+                  },
+                  {
+                      headers: {
+                          Authorization: `Bearer ${token}`,
+                      },
+                  }
+              );
+
+              // Обработка успешного ответа от сервера
+              console.log("Сервер ответил:", response.data);
+          } catch (error) {
+              // Обработка ошибок
+              console.error("Произошла ошибка:", error);
+          }
+      },
+      splitName(name) {
+          const parts = name.split(' '); // Разделить строку по пробелу
+          const [firstName, lastName, patronymic] = parts;
+          return {
+              name: firstName || '',
+              surname: lastName || '',
+              patronymic: patronymic || '',
           };
-          this.value.push(tag);
       },
-      removeAccess(entity, removedAccess) {
-          const nameParts = entity.name.split(' '); // Разделяем имя, фамилию и отчество
-          const name = nameParts[0];
-          const surname = nameParts[1];
-          const patronymic = nameParts[2];
-          var allAccessNumsString;
-          if (entity.selectedAccesses.length === 1) {
-              allAccessNumsString = entity.selectedAccesses[0].access_num.toString();
-          } else if (entity.selectedAccesses.length > 1) {
-              allAccessNumsString = entity.selectedAccesses
-                  .map(access => access.access_num)
-                  .join('');
-          }  else {
-              // Обработка случая, когда массив пустой
-              console.log("Массив пустой");
-          }
-          axios.put('/api/users/update-accesses', {
-              name,
-              surname,
-              patronymic,
-              accesses: allAccessNumsString,
-          }, {
-              headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`, // Передаем токен
-              },
-          })
-              .then(response => {
-                  // Обработка успешного ответа от сервера
-                  console.log('Доступы пользователя обновлены', response.data);
-                  entity.warning = true
-                  entity.deleted = removedAccess;
-                  setTimeout(() => {
-                      entity.warning = false;
-                  }, 2000);
-              })
-              .catch(error => {
-                  // Обработка ошибки
-                  console.error('Ошибка при обновлении доступов пользователя:', error);
-              });
-      }
-      },
-  created() {
+    updateSelected(entity, newValue) {
+          let deleted;
+          let added;
+        const previousValue = entity.selectedAccesses;
+        const { name, surname, patronymic } = this.splitName(entity.name);
+        let accessNumArray;
+        accessNumArray = newValue.map((access) => access.access_num).join('');
+        if(newValue.length === 0){
+            accessNumArray = "ㅤ";
+        }
+this.sendDataToServer(name,surname,patronymic,accessNumArray)
+        // Найдем добавленные элементы
+        const addedItems = newValue.filter((item) => !previousValue.some((prevItem) => prevItem.access_num === item.access_num));
 
-      const token = localStorage.getItem('token');
+        // Найдем удаленные элементы
+        const removedItems = previousValue.filter((prevItem) => !newValue.some((item) => item.access_num === prevItem.access_num));
 
-      axios.get('/api/users', {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          }
-      })
-          .then((response) => {
-              const users = response.data;
+        // Вывод информации о добавленных элементах
+        if (addedItems.length > 0) {
+            addedItems.forEach((addedItem) => {
+                entity.warning = true;
+                entity.warning_title = `У ${entity.name} добавлен доступ на <span class="warning_table_special"> ${addedItem.name}</span>`;
+                setTimeout(() => {
+                    entity.warning = false;
+                    entity.warning_title = '';
+                }, 2000);
 
-              // Преобразуйте данные о пользователях в ожидаемый формат
-              this.data = users.map((user) => {
+            });
+        }
 
-                  // const accessesArray = user.accesses.split('');
-                  // const selectedAccesses =[];
-                      const accessesArray = user.accesses.split('').map(Number); // Преобразуем в числа
-                      const selectedAccesses = [];
+        // Вывод информации о удаленных элементах
+        if (removedItems.length > 0) {
+            removedItems.forEach((removedItem) => {
+                entity.warning = true;
+                entity.warning_title = `У ${entity.name} удалён доступ <span class="warning_table_special">${removedItem.name}</span>`;
+                setTimeout(() => {
+                    entity.warning = false;
+                    entity.warning_title = '';
+                }, 2000);
 
-                      accessesArray.forEach((accessNum) => {
-                          const matchingValueItem = this.value.find((valueItem) => valueItem.access_num === accessNum);
-                          if (matchingValueItem) {
-                              selectedAccesses.push({
-                                  name: matchingValueItem.name,
-                                  access_num: matchingValueItem.access_num,
-                                  warning: false,
-                                  warning_title: "",
-                              });
-                          }
-                      });
+            });
+        }
 
-                  return {
-                      name: `${user.name} ${user.surname} ${user.patronymic}`,
-                      selectedAccesses,
-                  };
-              });
-          })
-          .catch((error) => {
-              console.error('Ошибка при получении данных о пользователях:', error);
-          });
+        // Присваиваем новое значение selectedAccesses
+        entity.selectedAccesses = newValue;
+    },
   },
+    created() {
+        const token = localStorage.getItem("token");
+        let newData = [];
+
+        axios
+            .get("/api/users", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                const users = response.data;
+
+                // Преобразуйте данные о пользователях в ожидаемый формат
+                this.data = users.map((user) => {
+                    // Добавьте проверку на null перед использованием accesses
+                    const accessesArray = user.accesses ? user.accesses.split("").map(Number) : [];
+                    const selectedAccesses = [];
+
+                    accessesArray.forEach((accessNum) => {
+                        const matchingValueItem = this.value.find(
+                            (valueItem) => valueItem.access_num === accessNum
+                        );
+                        if (matchingValueItem) {
+                            selectedAccesses.push({
+                                name: matchingValueItem.name,
+                                access_num: matchingValueItem.access_num,
+                                warning: false,
+                                warning_title: "",
+                                action: "",
+                            });
+                        }
+                    });
+
+                    return {
+                        name: `${user.name} ${user.surname} ${user.patronymic}`,
+                        selectedAccesses,
+                    };
+                });
+
+                newData = JSON.parse(JSON.stringify(this.data));
+                Object.defineProperty(this, "first_val", { value: [...newData] });
+            })
+            .catch((error) => {
+                console.error("Ошибка при получении данных о пользователях:", error);
+            });
+    },
 };
 </script>
 

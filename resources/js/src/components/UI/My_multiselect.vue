@@ -19,7 +19,7 @@
 
 <script>
 import Multiselect from "vue-multiselect/src/Multiselect.vue";
-import "@/assets/styles/multiselect-styles.css";
+// import "@/assets/styles/multiselect-styles.css";
 export default {
   components: {
     Multiselect,
