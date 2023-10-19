@@ -119,7 +119,6 @@
 </template>
 
   <script>
-// import "@/assets/styles/multiselect-styles.css";
 import UTable from "@/components/UI/UTable.vue";
 import Multiselect from "vue-multiselect/src/Multiselect.vue";
 import My_multiselect from "@/components/UI/My_multiselect.vue";

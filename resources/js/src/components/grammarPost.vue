@@ -26,25 +26,18 @@
     </div>
   </div>
 </template>
-      
+
     <script>
 import "@/assets/styles/multiselect-styles.css";
-// import "@/assets/styles/quill.css";
 import Multiselect from "vue-multiselect";
 import Popup from "@/components/UI/Popup.vue";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import CKEditor from "@ckeditor/ckeditor5-vue";
 import CustomFileInput from "@/components/UI/UInput_file.vue";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
-// import "@/assets/styles/ckeditor-styles.css";
 
 export default {
   components: {
     Multiselect,
     Popup,
     CustomFileInput,
-    QuillEditor,
   },
   data() {
     return {
@@ -74,7 +67,6 @@ export default {
           value: "",
         },
       ],
-      slider_value: "",
       headers: ["№", "Заголовок", ""],
       data: [
         {
@@ -138,6 +130,5 @@ export default {
   },
 };
 </script>
-      
+
     <style scoped></style>
-      

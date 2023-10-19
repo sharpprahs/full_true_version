@@ -86,19 +86,17 @@
     </div>
   </div>
 </template>
-    
+
   <script>
 import "@/assets/styles/multiselect-styles.css";
 import Multiselect from "vue-multiselect";
 import My_multiselect from "@/components/UI/My_multiselect.vue";
-import My_QuillEditor from "@/components/UI/My_QuillEditor.vue";
 import Popup from "@/components/UI/Popup.vue";
 import CustomFileInput from "@/components/UI/UInput_file.vue";
 
 export default {
   components: {
     Multiselect,
-    My_QuillEditor,
     My_multiselect,
     Popup,
     CustomFileInput,
@@ -187,7 +185,6 @@ export default {
           component: "UInput",
         },
       ],
-      slider_value: "",
       headers: [
         "Позиция",
         "Заголовок",
@@ -263,6 +260,5 @@ export default {
   },
 };
 </script>
-    
+
   <style scoped></style>
-    
