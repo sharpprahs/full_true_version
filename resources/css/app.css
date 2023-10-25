@@ -9,9 +9,9 @@ body {
 }
 
 :root {
-    --main_color: #1361a2;
+    --main_color: #064275;
     --main_color_opacity: rgba(19, 97, 162, 0.70);
-    --main_color_black: #242E3E;
+    --main_color_black: rgba(36, 46, 62, 0.07);
     --main_color_selected: #ff7070;
     --main_color_titles: #707a84;
     --main_color_breezy: #ECF3F8;

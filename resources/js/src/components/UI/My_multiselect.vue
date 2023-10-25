@@ -13,13 +13,10 @@
     :deselect-label="'Нажмите Enter, чтобы убрать'"
     placeholder="Добавьте значение"
   ></multiselect>
-  <!-- @tag="addTag" -->
-  <!-- track-by="number" -->
 </template>
 
 <script>
 import Multiselect from "vue-multiselect/src/Multiselect.vue";
-// import "@/assets/styles/multiselect-styles.css";
 export default {
   components: {
     Multiselect,

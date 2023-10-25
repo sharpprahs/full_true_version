@@ -24,6 +24,7 @@
               @update="handleUpdate(popup_items.indexOf(popup_item), $event)"
             ></component>
           </div>
+            <div :class="warning_class_popup" v-if="warning_status_popup">{{ warning_message_popup }}</div>
           <button class="doing_but" @click="create_new_teacher">Добавить перподавателя</button>
         </div>
       </popup>
@@ -88,7 +89,7 @@
             @update:model-value="
                 updateSelected(entity, $event)
               "
-            :options="tabs_items.map(item => item.title)"
+            :options="types_options"
             :searchable="false"
             :close-on-select="true"
             :show-labels="false"
@@ -113,6 +114,8 @@
               prev-link-class="custom-button"
               next-link-class="custom-button"
               @click="handlePageClick"
+              :custom-data="active_page"
+              ref="paginate"
           ></paginate>
       </div>
   </div>
@@ -150,6 +153,7 @@ export default {
       title_popupa: "Добавить преподавателя",
       wideMultiselect: false,
       type_text: "text",
+        types_options: [],
         specialization: [],
         specializationOptions:[],
       type_pas: "password",
@@ -175,339 +179,7 @@ export default {
       ],
         tabs_items: [],
         titles: [],
-      popup_items: [
-        {
-          title: "Слайдер",
-          value: "",
-          type: "text",
-          name:"slider",
-          placeholder: "Номер слайдера",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Преподаватели",
-          value: "",
-          type: "text",
-          name: "teachers",
-          placeholder: "Преподаватели",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Подкаст",
-          value: "",
-          type: "text",
-          name:"podcast",
-          placeholder: "Подкаст",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Имя",
-          value: "",
-          type: "text",
-          name:"name",
-          placeholder: "Укажите имя",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Фамилия рус.",
-          value: "",
-          type: "text",
-          name: "surname",
-          placeholder: "Укажите фамилию на рус.",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Краткая биография",
-          value: "",
-          type: "text",
-          name: "short_biography",
-          placeholder: "Краткая биография",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Записаться к",
-          value: "",
-          type: "text",
-          name: "make_an_appointment",
-          placeholder: "Записаться к",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Заниматься с",
-          value: "",
-          name: "practise_with",
-          type: "text",
-          placeholder: "Заниматься с",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Откуда",
-          value: "",
-          name: "where",
-          type: "text",
-          placeholder: "Откуда",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Видео на странице преподавателя",
-          value: "",
-          name: "video_on_page_teacher",
-          type: "text",
-          placeholder: "Откуда",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Блог URL в строке адреса",
-          value: "",
-          type: "text",
-          name: "blog_url_in_address_string",
-          placeholder: "Откуда",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Meta title",
-          value: "",
-          type: "text",
-          name: "meta_title",
-          placeholder: "80 символов максимум",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Meta description",
-          value: "",
-          type: "text",
-          name: "meta_description",
-          placeholder: "290 символов максимум",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Meta keywords",
-          value: "",
-          name: "meta_keywords",
-          type: "text",
-          placeholder: "200 символов максимум",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Страна",
-          value: "Египет",
-          name: "country",
-          type:"select",
-          options: ["Египет", "Россия", "Казахстан", "Италия", "Франция"],
-          allow_empty: false,
-          multiple: false,
-          taggable: false,
-          container_class: "add_teacher_container__item",
-          component: "My_multiselect",
-        },
-        {
-          title: "Тип",
-          value: "Активный",
-          name: "type",
-          type:"select",
-          options: ["Активный", "Не активный", "Skype", "Архив", "Скрыт"],
-          allow_empty: false,
-          multiple: false,
-          taggable: false,
-          container_class: "add_teacher_container__item",
-          component: "My_multiselect",
-        },
-        {
-          title: "Специализация",
-          value: "Дошкольники",
-          type:"select",
-          name: "specialization",
-          options: [
-              "Школьники",
-              "Дошкольники"
-          ],
-          allow_empty: true,
-          multiple: true,
-          taggable: false,
-          container_class: "add_teacher_container__item_one",
-          component: "My_multiselect",
-        },
-        {
-          title: "Отображение",
-          name: "visible",
-          type:"select",
-          value: [
-            "Отображать в тесте удовлетворённости",
-            "Не отображать в слайдере",
-          ],
-          options: [
-            "Отображать в тесте удовлетворённости",
-            "Не отображать в слайдере",
-          ],
-          allow_empty: true,
-          multiple: true,
-          taggable: false,
-          container_class: "add_teacher_container__item_one",
-          component: "My_multiselect",
-        },
-        {
-          title: "Фото в слайдер 220x220",
-          value: "",
-          type: "file",
-          name: "photo_into_slider_220x220",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Фото в банер 300x300",
-          value: "",
-          type: "file",
-          name: "photo_into_slider_300x300",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Картинка в список статей",
-          value: "",
-          type: "file",
-          name: "img_into_list_article",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Картинка в шапку статьи",
-          value: "",
-          type: "file",
-          name: "img_into_header_article",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Картинка в шапку преподавателя",
-          value: "",
-          type: "file",
-          name: "img_into_header_teacher",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Картинка в плашку с тестом",
-          value: "",
-          type: "file",
-          name: "img_into_test_plate",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Футер мобильный",
-          value: "",
-          type: "file",
-          name: "footer_mobile",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Футер планшет",
-          value: "",
-          type: "file",
-          name: "footer_tablet",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Футер десктоп",
-          value: "",
-          type: "file",
-          name: "footer_pc",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "OgImage",
-          value: "",
-          name: "og_image",
-          type: "file",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "OgImage в пост",
-          value: "",
-          name: "og_image_into_post",
-          type: "file",
-          placeholder: "Выберите файл",
-          class: "my_inputs_popups",
-          container_class: "add_teacher_container__item",
-          component: "CustomFileInput",
-        },
-        {
-          title: "Цвет",
-          value: "#0f1344",
-          name: "color",
-          type: "color",
-          class: "my_inputs__color",
-          container_class: "add_teacher_container__item",
-          component: "UInput",
-        },
-        {
-          title: "Описание",
-          value: "<p>123asd</p>",
-          type:"tip-tap",
-          name: "description",
-          container_class: "add_teacher_container__item_one",
-          component: "My_tiptap",
-        },
-        // {
-        //   title: "Описание полное",
-        //   value: "",
-        //   name: "full_description",
-        //   container_class: "add_teacher_container__item_one",
-        //   component: "My_QuillEditor",
-        // },
-      ],
+      popup_items: [],
       slider_value: "",
       headers: [
         "Номер ID",
@@ -519,18 +191,375 @@ export default {
         "",
           "",
       ],
+        country_data: [],
       data: [],
+        warning_status_popup: false,
+        warning_message_popup: "",
+        warning_class_popup: "",
         teacherTypeTitle: "Все",
     };
   },
     mounted() {
         this.fetchTeacherTableData();
         this.fetchTeacherData();
+        this.fetchCountryData();
         this.fetchTeacherSpecTableData();
     },
-        methods: {
+    methods: {
+        fetchCountryData(){
+            const token = localStorage.getItem("token");
+            // Выполняем запрос к бэкэнду для получения заголовков
+            axios.get('/api/country', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }})
+                .then((response) => {
+                    const country = response.data;
+                    // Создаем массив вкладок tabs_items
+                    this.country_data = [
+                        ...country.map(item => item.title )
+                    ];
+                    // this.types_options = data_types.map(item => item.title);
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении заголовков:', error);
+                });
+        },
+      loadingPopupItems(){
+          this.popup_items = [
+          {
+              title: "Преподаватели",
+                  value: "",
+              type: "text",
+              name: "posBlog",
+              placeholder: "Преподаватели",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Подкаст",
+                  value: "",
+              type: "text",
+              name:"podcastPos",
+              placeholder: "Подкаст",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Имя",
+                  value: "",
+              type: "text",
+              name:"name",
+              placeholder: "Укажите имя",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+              {
+                  title: "Имя рус.",
+                  value: "",
+                  type: "text",
+                  name:"titleRuFirstName",
+                  placeholder: "Укажите имя",
+                  class: "my_inputs_popups",
+                  container_class: "add_teacher_container__item",
+                  component: "UInput",
+              },
+          {
+              title: "Фамилия рус.",
+                  value: "",
+              type: "text",
+              name: "titleRuSecondname",
+              placeholder: "Укажите фамилию на рус.",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Записаться у кого",
+                  value: "",
+              type: "text",
+              name: "title4",
+              placeholder: "Записаться у кого",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Записаться к",
+                  value: "",
+              type: "text",
+              name: "title3",
+              placeholder: "Записаться к",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Заниматься с",
+                  value: "",
+              name: "title2",
+              type: "text",
+              placeholder: "Заниматься с",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Откуда",
+                  value: "",
+              name: "where",
+              type: "text",
+              placeholder: "Откуда",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Видео на странице преподавателя",
+                  value: "",
+              name: "video",
+              type: "text",
+              placeholder: "Откуда",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Блог URL в строке адреса",
+                  value: "",
+              type: "text",
+              name: "url",
+              placeholder: "Откуда",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Meta title",
+                  value: "",
+              type: "text",
+              name: "metaTitle",
+              placeholder: "80 символов максимум",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Meta description",
+                  value: "",
+              type: "text",
+              name: "metaDescription",
+              placeholder: "290 символов максимум",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Meta keywords",
+                  value: "",
+              name: "metaKeywords",
+              type: "text",
+              placeholder: "200 символов максимум",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Страна",
+                  value: this.country_data[0],
+              name: "country",
+              type:"select",
+              options: this.country_data,
+              allow_empty: false,
+              multiple: false,
+              taggable: false,
+              container_class: "add_teacher_container__item",
+              component: "My_multiselect",
+          },
+          {
+              title: "Тип",
+                  value: this.types_options[0],
+              name: "teacherType",
+              type:"select",
+              options: this.types_options,
+              allow_empty: false,
+              multiple: false,
+              taggable: false,
+              container_class: "add_teacher_container__item",
+              component: "My_multiselect",
+          },
+          {
+              title: "Специализация",
+                  value: this.specializationOptions[0],
+              type:"select",
+              name: "teacherSpec",
+              options: this.specializationOptions,
+              allow_empty: true,
+              multiple: true,
+              taggable: false,
+              container_class: "add_teacher_container__item_one",
+              component: "My_multiselect",
+          },
+          {
+              title: "Отображение",
+                  name: "visible",
+              type:"select",
+              value: [
+              "Отображать в тесте удовлетворённости",
+              "Не отображать в слайдере",
+          ],
+              options: [
+              "Отображать в тесте удовлетворённости",
+              "Не отображать в слайдере",
+          ],
+              allow_empty: true,
+              multiple: true,
+              taggable: false,
+              container_class: "add_teacher_container__item_one",
+              component: "My_multiselect",
+          },
+          {
+              title: "Фото в слайдер 220x220",
+                  value: "",
+              type: "file",
+              name: "imageSlider",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Фото в банер 300x300",
+                  value: "",
+              type: "file",
+              name: "imageBanner",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Картинка в список статей",
+                  value: "",
+              type: "file",
+              name: "imageBlogPreview",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Картинка в шапку статьи",
+                  value: "",
+              type: "file",
+              name: "imageBlogHeader",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Картинка в шапку преподавателя",
+                  value: "",
+              type: "file",
+              name: "imageHeader",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Картинка в плашку с тестом",
+                  value: "",
+              type: "file",
+              name: "imageTest",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Футер мобильный",
+                  value: "",
+              type: "file",
+              name: "imageFooter",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Футер планшет",
+                  value: "",
+              type: "file",
+              name: "imageFooterSm",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Футер десктоп",
+                  value: "",
+              type: "file",
+              name: "imageFooterMd",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "OgImage",
+                  value: "",
+              name: "ogImage",
+              type: "file",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "OgImage в пост",
+                  value: "",
+              name: "ogImagePost",
+              type: "file",
+              placeholder: "Выберите файл",
+              class: "my_inputs_popups",
+              container_class: "add_teacher_container__item",
+              component: "CustomFileInput",
+          },
+          {
+              title: "Цвет",
+                  value: "#0f1344",
+              name: "color",
+              type: "color",
+              class: "my_inputs__color",
+              container_class: "add_teacher_container__item",
+              component: "UInput",
+          },
+          {
+              title: "Описание",
+                  value: "<p>Напишите описание</p>",
+              type:"tip-tap",
+              name: "content",
+              container_class: "add_teacher_container__item_one",
+              component: "My_tiptap",
+          },
+              {
+                  title: "Описание полное",
+                  value: "<p>Напишите полное описание</p>",
+                  type:"tip-tap",
+                  name: "blogDescription",
+                  container_class: "add_teacher_container__item_one",
+                  component: "My_tiptap",
+              },
+          ]
+      },
             create_new_teacher(){
-                const variables = {};
+                let variables = {};
 
                 // Пройдитесь по массиву popup_items и извлеките name и value для каждого элемента
                 this.popup_items.forEach(item => {
@@ -540,10 +569,25 @@ export default {
                     // Добавьте переменную в объект variables
                     variables[name] = value;
                 });
-
+                const hasEmptyFields = Object.values(variables).some(value => value === undefined || value === null || value === '');
+console.log(variables)
                 // Теперь у вас есть объект variables с переменными name и их значениями
                 // Вы можете использовать этот объект для дальнейшей обработки
-                console.log(variables);
+                if (hasEmptyFields){
+                    this.warning_status_popup = true;
+                    this.warning_message_popup = "Не все поля заполнены";
+                    this.warning_class_popup = "popup_warning";
+                } else {
+                    this.warning_status_popup = true;
+                    this.warning_message_popup = "Данные успешно отправлены на сервер";
+                    this.warning_class_popup = "popup_warning popup_warning_true";
+                    this.popup_items.forEach(item => {
+                        if(item.type!== "color"){
+                            item.value = ""; // Устанавливаем значение value в пустую строку
+                        }
+                    });
+                    //тут надо будет добавить ещё очистку файлов
+                }
             },
             updateSelected(entity, newValue){
                 const item = this.tabs_items.find(tab => tab.title === newValue);
@@ -668,7 +712,6 @@ export default {
             },
             handlePageClick(event) {
                 const buttonText = event.target.textContent;
-            // target.__vueParentComponent.data.target.innerValue[0]
                 if (buttonText === "Предыдущая страница") {
                     this.active_page--;
                     if(this.active_page <= 0){
@@ -680,9 +723,9 @@ export default {
                         this.active_page = this.page_num;
                     }
                 } else {
-                    // Кликнули на другую страницу
-                    this.active_page = parseInt(event.target.__vueParentComponent.data.innerValue);
-                    // Ваш код для обработки нажатия на другую страницу
+                    // Используйте this.customData для доступа к переданным данным
+                    this.active_page = parseInt(this.$refs.paginate.innerValue);
+
                 }
             },
             fetchTeacherSpecTableData(){
@@ -697,6 +740,8 @@ export default {
 
                         // Создаем массив вкладок tabs_items
                         this.specialization = specialization.map(item => ({ id: item.id, title: item.title }));
+                        this.specializationOptions = this.specialization.map(item => item.title);
+                        this.loadingPopupItems();
                     })
                     .catch((error) => {
                         console.error('Ошибка при получении заголовков:', error);
@@ -720,6 +765,12 @@ export default {
                       // Добавляем заголовки из полученных данных
                       ...titles.map(item => ({ title: item.title, status: false, id: item.id }))
                   ];
+                  // this.types_options = this.types_options.map(item => item.title)
+                  const data_types = [
+                      ...titles.map(item => ({ title: item.title, status: false, id: item.id }))
+                  ]
+
+                  this.types_options = data_types.map(item => item.title);
               })
               .catch((error) => {
                   console.error('Ошибка при получении заголовков:', error);

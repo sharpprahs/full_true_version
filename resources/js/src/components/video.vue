@@ -35,9 +35,8 @@
           ></multiselect>
         </template>
         <template #column5="">
-          <button class="delete_item">
-            <img src="../assets/images/basket.svg" alt="Удалить" />
-          </button>
+            <button class="delete_item">
+            </button>
         </template>
       </UTable>
     </div>

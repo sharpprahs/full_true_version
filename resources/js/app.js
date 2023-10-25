@@ -4,8 +4,7 @@ import router from "@/router/router.js";
 import store from "@/store/store.js";
 import components from "@/components/UI"
 import "@/assets/styles/style_v1.css"
-// import "@/assets/styles/multiselect-styles.css"
-// import "@/assets/styles/ckeditor-styles.css"
+
 
 const app = createApp(App)
 

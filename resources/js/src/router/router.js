@@ -1,6 +1,5 @@
 import Main from "@/pages/Main.vue"
 import admin_panel from "@/pages/admin_panel.vue"
-// import accesses from "@/components/Accesses.vue"
 import { createRouter, createWebHistory } from "vue-router"
 
 const routes = [

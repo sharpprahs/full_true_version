@@ -33,8 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/teacher/edit_teacher',[TeacherController::class, 'updateTeacherData']);
     Route::get('/teacher-specialization',[TeacherController::class, 'specializationData']);
     Route::delete('/teacher/delete/{id}', [TeacherController::class, 'delete_teacher']);
+    Route::get('/country', [CountryController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-Route::get('/country', [CountryController::class, 'index']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

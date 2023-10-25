@@ -25,7 +25,7 @@
           placeholder="Введите пароль"
           class="my_inputs"
           v-model="password"
-          autocomplete="password"
+          autocomplete="family-name"
         />
       </div>
         <div v-if="showError" class="error-message">{{ errorMessage }}</div>
@@ -77,7 +77,7 @@ export default {
                   const data = await response.json();
                   localStorage.setItem("token", data.token);
                   localStorage.setItem("accesses", data.accesses);
-                  this.$router.push("/admin_panel");
+                  this.$router.push("/admin_panel/accesses");
               } else if (response.status === 401) {
                   this.showError = true;
                   this.errorMessage = "Неверный пароль";

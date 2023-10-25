@@ -18,9 +18,8 @@
           <a :href="entity.file_link">{{ entity.file }}</a>
         </template>
         <template #column4="">
-          <button class="delete_item">
-            <img src="../assets/images/basket.svg" alt="Удалить" />
-          </button>
+            <button class="delete_item">
+            </button>
         </template>
       </UTable>
     </div>

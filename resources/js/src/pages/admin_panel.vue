@@ -51,17 +51,6 @@
             </li>
           </ul>
         </li>
-        <!-- <li class="menu-item">
-          <a href="#" class="menu-item-link" @click="toggleSubMenu(0)"><img
-              src="../assets/images/menu-teachers.svg"><span>Команда</span></a>
-          <ul class="submenu">
-            <li class="submenu-item"><a href="#"><img src="../assets/images/accesses.svg">
-                <span>Доступы</span></a></li>
-            <li class="submenu-item"><a href="#"> <img src="../assets/images/teacher.svg">
-                <span>Преподователи</span></a></li>
-
-          </ul>
-        </li> -->
       </ul>
         <button class="logout" @click="logoutUser">ВЫЙТИ</button>
 
@@ -219,25 +208,12 @@ export default {
           }
       },
 
-    // toggleSubMenu(index) {
-    //   const menuItems = document.querySelectorAll('.menu-item'); // Получаем все элементы с классом 'menu-item'
-    //   const menuItem = menuItems[index]; // Получаем элемент menu-item по индексу
-
-    //   if (menuItem) {
-    //     const submenu = menuItem.querySelector('.submenu'); // Находим дочерний элемент с классом 'submenu'
-
-    //     if (submenu) {
-    //       // Если submenu существует, то добавляем/удаляем класс 'active'
-    //       submenu.classList.toggle('active');
-    //     }
-    //   }
-    // }
   },
     created() {
         const accessesArray = localStorage.getItem("accesses").split('');
         this.menuItems.forEach((menuItem, index) => {
-            // Перебираем элементы submenu
-            menuItem.submenu.forEach((subMenuItem, subIndex) => {
+            // Перебираем элементы submenu для доступов
+            menuItem.submenu.forEach((subMenuItem) => {
                 if (accessesArray.includes(subMenuItem.access_key.toString())) {
                     subMenuItem.access = true;
                 }
