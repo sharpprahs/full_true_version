@@ -513,6 +513,8 @@ a:active,
 
 
 .nav_panel {
+    margin-top: 55px;
+    margin-bottom: 55px;
     margin-left: 70px;
     flex-wrap: wrap;
     display: flex;
@@ -534,8 +536,6 @@ a:active,
 
 .access_title {
     color: var(--main_color_black);
-    margin-top: 55px;
-    margin-bottom: 55px;
     /* font-family: "Open Sans", sans-serif; */
     font-weight: 400;
     font-size: clamp(1.125rem, 1.3589rem + -1.1696vw, 1.25rem);
@@ -1213,10 +1213,13 @@ li[data-v-9e1e7273].active a{
 
     .conatainer_type_content {
         margin: auto;
-        margin-top: 0px;
+        margin-top: -20px;
         padding-left: 5%;
         padding-bottom: 25px;
         width: 95%;
+    }
+    .nav_panel{
+        margin-bottom: 33px;
     }
 
     .logout {
@@ -1225,14 +1228,17 @@ li[data-v-9e1e7273].active a{
 }
 
 @media (min-width:0px) and (max-width: 520px) {
+    .editor_tabs{
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow-x: auto;
+    }
     .nav_panel {
         flex-direction: column;
         padding-left: 5%;
         /* padding-top: 5%; */
         width: 90%;
-        margin: auto;
-        margin-top: 40px;
-        margin-bottom: 40px;
+        margin: 40px auto;
         align-items: flex-start;
     }
     .warning_table div {

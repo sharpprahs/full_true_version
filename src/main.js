@@ -11,7 +11,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 // Регистрация Quill как глобального компонента
 
-import '@/assets/styles/style_v1.css'
+import '@/assets/styles/style_v13.css'
 // import '@/assets/styles/multiselect-styles.css';
 // import multiselect from 'vue-multiselect'
 
